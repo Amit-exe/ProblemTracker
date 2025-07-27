@@ -1,18 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider } from "./Context/AuthContext";
+import ProblemTracker from "./Components/ProblemTracker";
+import LoginForm from "./Components/LoginForm";
+import RegisterForm from "./Components/RegisterForm";
+import PrivateRoute from "./utils/PrivateRoute";
 
-import ProblemTracker from './Components/ProblemTracker'
-
-function App() {
-  
-  const counterNumber = [1,1,1];
+const App = () => {
   return (
-    <>
-    <ProblemTracker/>
-    </>
-  )
-}
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route
+            path="/problems"
+            element={
+              <PrivateRoute>
+                <ProblemTracker />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/" element={<Navigate to="/problems" />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+};
 
-export default App
+export default App;
